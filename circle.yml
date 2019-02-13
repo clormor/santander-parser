@@ -1,19 +1,31 @@
-machine:
-  environment:
-    TERM: dumb
-  java:
-    version: oraclejdk8
+version: 2 # use CircleCI 2.0
+jobs: # a collection of steps
+  build: # runs not using Workflows must have a `build` job as entry point
 
-dependencies:
-  override:
-    - ./gradlew resolveDependencies
+    docker: # run the steps with Docker
+      - image: circleci/openjdk:8-jdk-browsers
+    
+    steps: # a collection of executable commands
 
-test:
-  override:
-    - ./gradlew check
+      - checkout # check out source code to working directory
 
-deployment:
-  release:
-    tag: /v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]*)*/
-    commands:
-      - ./gradlew publish
+      - restore-cache:
+          key: santander-parser-{{ checksum "build.gradle" }}
+
+      - run: ./gradlew resolveDependencies # gets the project dependencies
+      
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.gradle
+          key: santander-parser-{{ checksum "build.gradle" }}
+      
+      - run: ./gradlew check # run the actual tests
+      
+      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
+      # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: build/reports/test/test
+      
+          #- store_artifacts: # store the uberjar as an artifact
+      # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+      #path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
+      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples 
