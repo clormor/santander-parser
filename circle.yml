@@ -19,7 +19,7 @@ jobs:
             - ~/.gradle
           key: santander-parser-{{ checksum "build.gradle" }}
       
-      - run: ./gradlew check
+      - run: ./gradlew build
       
       - store_test_results:
           path: build/test-results/test
