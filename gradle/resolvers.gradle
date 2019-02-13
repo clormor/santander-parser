@@ -1,0 +1,8 @@
+// to use a local artifactory, set this property in ~/.gradle/gradle.properties
+if (project.hasProperty('useLocalArtifactory') && useLocalArtifactory == 'true') {
+  println "Using local resolvers"
+  apply from: "${rootProject.projectDir}/gradle/resolvers.local.gradle"
+} else {
+  println "Using remote resolvers"
+  apply from: "${rootProject.projectDir}/gradle/resolvers.remote.gradle"
+}

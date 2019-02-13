@@ -1,0 +1,11 @@
+final def defineResolvers = {
+
+  maven {
+    url "https://artifactory.palantir.build/artifactory/all-jar/"
+  }
+
+} 
+
+project.buildscript.repositories(defineResolvers)
+repositories(defineResolvers)
+

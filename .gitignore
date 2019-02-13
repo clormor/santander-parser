@@ -1,0 +1,37 @@
+# ignore files generated as part of build process
+bin
+build
+ecbuild
+dist
+log
+
+# ignore vim swap files
+.*.sw[nop]
+
+#ignore widows files
+Thumbs.db
+
+# but always keep .keep_me files (they mark required empty directories)
+!.keep_me
+
+jmimemagic.log
+.classpath
+.settings/
+.project
+.gradle/
+
+#what the hell is this?
+velocity.log
+
+*.iml
+*.iws
+*.ipr
+
+out/
+
+# ignore jaxb-generated source
+src/main/java-gen
+generated_src
+
+# ignore integrationTests - for local development only
+src/integrationTest

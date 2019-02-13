@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'org.inferred.processors' version '2.1.0'
+    id 'com.palantir.circle.style' version '1.1.4'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    integrationTest {
+        compileClasspath += sourceSets.main.output + configurations.testCompile
+        runtimeClasspath += output + compileClasspath + configurations.testRuntime
+    }
+}
+
+dependencies {
+    compile "com.google.guava:guava:$guavaVersion"
+    compile "joda-time:joda-time:$jodaTimeVersion"
+    compile "org.apache.pdfbox:pdfbox:$pdfBoxVersion"
+    implementation "org.immutables:value-annotations:$immutablesVersion"
+    annotationProcessor "org.immutables:value:$immutablesVersion"
+	testCompile "junit:junit:$junitVersion"
+}
+
+idea {
+    module {
+        testSourceDirs += sourceSets.integrationTest.java.srcDirs
+        testResourceDirs += sourceSets.integrationTest.resources.srcDirs
+        scopes.TEST.plus += [ configurations.integrationTestCompile ]
+        inheritOutputDirs = true
+        downloadJavadoc = true
+        downloadSources = true
+        scopes.PROVIDED.plus += [configurations.compileOnly]
+        iml {
+            whenMerged { module ->
+                def compileDeps = module.dependencies.findAll { it.scope == 'COMPILE' }
+                compileDeps*.exported = true
+            }
+        }
+    }
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
+
+// Download dependencies to Gradle's cache
+task resolveDependencies {
+  doLast {
+    project.rootProject.allprojects.each { subProject ->
+      subProject.buildscript.configurations.each { if (it.canBeResolved) it.resolve() }
+      subProject.configurations.each { if (it.canBeResolved) it.resolve() }
+    }
+  }
+}
+

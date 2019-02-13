@@ -1,0 +1,30 @@
+final def defineResolvers = {
+    def artifactoryRoot = "http://localhost:8081/artifactory"
+
+    def prefix = "[organisation]/[module]/[revision]"
+
+    maven {
+        url "${artifactoryRoot}/palantir/"
+      }
+    ivy {
+        url "${artifactoryRoot}/palantir"
+        layout "pattern", {
+            artifact "${prefix}/[artifact]-[revision](-[classifier]).[ext]"
+            artifact "${prefix}/[type]s/[artifact](-[classifier]).[ext]"
+            artifact "${prefix}/srcs/[artifact](-[classifier]).[ext]"
+            artifact "${prefix}/[artifact]-[revision].[ext]"
+            artifact "${prefix}/[artifact].[ext]"
+            ivy      "${prefix}/[type]s/[artifact](-[classifier]).[ext]"
+            ivy      "${prefix}/srcs/[artifact](-[classifier]).[ext]"
+            ivy      "${prefix}/ivy-[revision].xml"
+        }
+        // TODO: not sure what this is for, but the palantir-java plugin seems to need something called "publish"
+        name 'publish'
+    }
+}
+
+// We need the resolvers for both the buildscript classpath and normal dependencies
+project.buildscript {
+    repositories(defineResolvers)
+}
+repositories(defineResolvers)
