@@ -1,10 +1,12 @@
 buildscript {
   repositories {
+    mavenCentral()
     maven {
-      url "http://dl.bintray.com/palantir/releases"
+      url 'http://dl.bintray.com/palantir/releases'
     }
   }
   dependencies {
+    classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0'
     classpath 'com.palantir:gradle-gitsemver:0.7.3'
   }
 }
@@ -25,6 +27,8 @@ targetCompatibility = '1.8'
 group = 'io.github.clormor'
 
 apply plugin: 'gitsemver'
+apply plugin: 'io.codearte.nexus-staging'
+
 version semverVersion()
 
 def isSnapshot() {
@@ -151,5 +155,9 @@ uploadArchives {
       }
     }
   }
+}
+
+nexusStaging {
+    stagingProfileId = "clormor"
 }
 
