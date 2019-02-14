@@ -11,7 +11,7 @@ plugins {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
-version = '0.0.1'
+version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -115,7 +115,10 @@ publishing {
     }
     repositories {
         maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
             def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
