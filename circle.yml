@@ -14,12 +14,12 @@ jobs:
       - checkout
       - restore-cache:
           key: santander-parser-{{ checksum "build.gradle" }}
-      - run: ./gradlew resolveDependencies
+      - run: ./gradlew --info resolveDependencies
       - save_cache:
           paths:
             - ~/.gradle
           key: santander-parser-{{ checksum "build.gradle" }} 
-      - run: ./gradlew build
+      - run: ./gradlew --info build
       - store_test_results:
           path: build/test-results/test
 
@@ -31,12 +31,12 @@ jobs:
       - checkout
       - restore-cache:
           key: santander-parser-{{ checksum "build.gradle" }}
-      - run: ./gradlew resolveDependencies
+      - run: ./gradlew --info resolveDependencies
       - save_cache:
           paths:
             - ~/.gradle
           key: santander-parser-{{ checksum "build.gradle" }} 
-      - run: ./gradlew publish
+      - run: ./gradlew --info publish
       - store_test_results:
           path: build/test-results/test
 
