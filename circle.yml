@@ -32,12 +32,16 @@ workflows:
     jobs:
       - build:
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only:
+                - develop
+                - /feature.*/
+                - /rc-.*/
       - publish:
           requires:
             - build
           filters:
-            tags:
-              only: /v.*/
+            branches:
+              only:
+                - master
 
