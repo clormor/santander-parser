@@ -12,6 +12,9 @@ jobs:
     
     steps:
       - checkout
+      - run:
+          name: Prepare for signing
+          command: scripts/prepare-for-signing.sh
       - run: ./gradlew --info --refresh-dependencies clean build
       - store_test_results:
           path: build/test-results/test
@@ -37,7 +40,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - deploy:
+      - publish:
           requires:
             - build
           filters:
