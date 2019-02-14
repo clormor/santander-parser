@@ -1,7 +1,7 @@
 only-tags: &only-tags
   filters:
     tags:
-      only: /^v.*/
+      only: /^.*/
 
 version: 2
 jobs:
