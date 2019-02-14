@@ -2,20 +2,21 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'idea'
-    id 'maven-publish'
+    id 'maven'
+    id 'signing'
     id 'org.inferred.processors' version '2.1.0'
     id 'com.palantir.circle.style' version '1.1.4'
-//    id "javamuc.gradle-semantic-build-versioning" version "4.1.1"
-//    id "net.vivin.gradle-semantic-build-versioning" version "4.0.0"
-//    id "com.github.ben-manes.versions" version "0.20.0"
-//    id "io.wusa.semver-git-plugin" version "0.0.1"
-    id "eu.t-systems-mms.git-semver" version "0.1.0"
+//    id "eu.t-systems-mms.git-semver" version "0.1.0"
 }
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
-version gitMavenVersion()
+version 0.3.0-SNAPSHOT
+
+ext."signing.keyId" = "$System.env.MAVEN_SIGN_KEY_ID"
+ext."signing.secretKeyRingFile" = "$System.env.MAVEN_SIGN_KEY_FILE"
+ext."signing.password" = "$System.env.MAVEN_SIGN_KEY_PASSWORD"
 
 repositories {
     mavenCentral()
@@ -86,6 +87,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -136,3 +145,47 @@ javadoc {
     }
 }
 
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
+      }
+
+      pom.project {
+        name 'Santander Parser'
+        packaging 'jar'
+        // optionally artifactId can be defined here
+        description 'Library for parsing UK Santander bank and credit card statements'
+        url 'https://github.com/clormor/santander-parser'
+
+        scm {
+          connection 'git@github.com:clormor/santander-parser.git'
+          developerConnection 'git@github.com:clormor/santander-parser.git'
+          url 'https://github.com/clormor/santander-parser'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'clormor'
+            name 'Chris Lormor'
+            email 'cdlormor@gmail.com'
+          }
+        }
+      }
+    }
+  }
+}
