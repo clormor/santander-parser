@@ -12,7 +12,7 @@ plugins {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
-version '0.4.2'
+version '0.4.3'
 
 ext."signing.keyId" = "$System.env.MAVEN_SIGN_KEY_ID"
 ext."signing.secretKeyRingFile" = "$System.env.MAVEN_SIGN_KEY_FILE"
