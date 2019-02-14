@@ -1,7 +1,7 @@
 only-tags: &only-tags
   filters:
     tags:
-      only: /^.*/
+      only: /^v.*/
 
 version: 2
 jobs:
@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - checkout
-      - run: ./gradlew --info --refreshDependencies clean build
+      - run: ./gradlew --info --refresh-dependencies clean build
       - store_test_results:
           path: build/test-results/test
 
@@ -22,7 +22,7 @@ jobs:
     
     steps:
       - checkout
-      - run: ./gradlew --info --refreshDependencies clean publish
+      - run: ./gradlew --info --refresh-dependencies clean publish
       - store_test_results:
           path: build/test-results/test
 
