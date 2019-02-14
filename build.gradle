@@ -26,7 +26,10 @@ group = 'io.github.clormor'
 
 apply plugin: 'gitsemver'
 version semverVersion()
-//version '0.4.3'
+
+def isSnapshot() {
+  return project.version =~ /.*g[-+.]?[a-fA-F0-9]{3,}/
+}
 
 ext."signing.keyId" = "$System.env.MAVEN_SIGN_KEY_ID"
 ext."signing.secretKeyRingFile" = "$System.env.MAVEN_SIGN_KEY_FILE"
@@ -80,16 +83,6 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
-
-// Download dependencies to Gradle's cache
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { if (it.canBeResolved) it.resolve() }
-      subProject.configurations.each { if (it.canBeResolved) it.resolve() }
-    }
-  }
-}
 
 task sourcesJar(type: Jar) {
     classifier "sources"
