@@ -1,8 +1,3 @@
-only-tags: &only-tags
-  filters:
-    tags:
-      only: /^v.*/
-
 version: 2
 jobs:
 
@@ -47,9 +42,11 @@ workflows:
               only: develop
   publish-release:
     jobs:
+      - build:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
       - publish:
-          requires:
-            - build
           filters:
             branches:
               ignore: /.*/
