@@ -5,12 +5,17 @@ plugins {
     id 'maven-publish'
     id 'org.inferred.processors' version '2.1.0'
     id 'com.palantir.circle.style' version '1.1.4'
+//    id "javamuc.gradle-semantic-build-versioning" version "4.1.1"
+//    id "net.vivin.gradle-semantic-build-versioning" version "4.0.0"
+//    id "com.github.ben-manes.versions" version "0.20.0"
+//    id "io.wusa.semver-git-plugin" version "0.0.1"
+    id "eu.t-systems-mms.git-semver" version "0.1.0"
 }
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
-version = '0.0.8'
+version gitMavenVersion()
 
 repositories {
     mavenCentral()
