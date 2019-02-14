@@ -1,3 +1,10 @@
+only-deploy-tags: &only-deploy-tags
+  filters:
+    tags:
+      only: /^deploy-.*/
+    branches:
+      ignore: /.*/
+
 version: 2
 jobs:
 
@@ -25,14 +32,6 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     
     steps:
-      - checkout
-      - restore-cache:
-          key: santander-parser-{{ checksum "build.gradle" }}
-      - run: ./gradlew resolveDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: santander-parser-{{ checksum "build.gradle" }}
       - run: ./gradlew publish
 
 workflows:
@@ -48,7 +47,8 @@ workflows:
                 - /rc-.*/
   tagged-build:
     jobs:
+      - build: *only-deploy-tags
       - publish:
-          filters:
-            tags:
-              only: /^v.*/
+          <<: *only-deploy-tags
+          requires:
+            - build
