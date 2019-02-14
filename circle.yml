@@ -47,11 +47,8 @@ workflows:
               only: develop
   publish-release:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
       - publish:
+          require: build
           filters:
             branches:
               ignore: /.*/
