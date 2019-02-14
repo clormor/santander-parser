@@ -10,7 +10,7 @@ plugins {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
-version = '0.0.2-SNAPSHOT'
+version = '0.0.8'
 
 repositories {
     mavenCentral()
