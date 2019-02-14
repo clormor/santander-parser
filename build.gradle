@@ -157,7 +157,7 @@ uploadArchives {
   }
 }
 
-nexusStaging {
-    stagingProfileId = "io.github.clormor"
-}
+//nexusStaging {
+//    stagingProfileId = "io.github.clormor"
+//}
 
