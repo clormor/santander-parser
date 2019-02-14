@@ -48,7 +48,8 @@ workflows:
   publish-release:
     jobs:
       - publish:
-          requires: build
+          requires:
+            - build
           filters:
             branches:
               ignore: /.*/
