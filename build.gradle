@@ -2,12 +2,15 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'idea'
+    id 'maven-publish'
+    id 'signing'
     id 'org.inferred.processors' version '2.1.0'
     id 'com.palantir.circle.style' version '1.1.4'
 }
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
+group = 'com.lormor'
 version = '0.0.1'
 
 repositories {
@@ -69,3 +72,63 @@ task resolveDependencies {
   }
 }
 
+task sourcesJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                name = 'Santander Parser'
+                description = 'Library for parsing Santander UK credit card statements'
+                url = 'https://github.com/clormor/santander-parser'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'clormor'
+                        name = 'Chris Lormor'
+                        email = 'cdlormor@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/clormor/santander-parser.git'
+                    developerConnection = 'https://github.com/clormor/santander-parser.git'
+                    url = 'https://github.com/clormor/santander-parser'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
