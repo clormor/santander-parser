@@ -1,13 +1,9 @@
 buildscript {
   repositories {
     mavenCentral()
-    maven {
-      url 'http://dl.bintray.com/palantir/releases'
-    }
   }
   dependencies {
     classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0'
-    classpath 'com.palantir:gradle-gitsemver:0.7.3'
   }
 }
 
@@ -19,25 +15,16 @@ plugins {
     id 'signing'
     id 'org.inferred.processors' version '2.1.0'
     id 'com.palantir.circle.style' version '1.1.4'
-    id "eu.t-systems-mms.git-semver" version "0.1.0"
+    id 'net.researchgate.release' version '2.8.0'
 }
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
 
-apply plugin: 'gitsemver'
-apply plugin: 'io.codearte.nexus-staging'
-
-version semverVersion()
-
-def isSnapshot() {
-  return project.version =~ /.*g[-+.]?[a-fA-F0-9]{3,}/
-}
-
-ext."signing.keyId" = "$System.env.MAVEN_SIGN_KEY_ID"
-ext."signing.secretKeyRingFile" = "$System.env.MAVEN_SIGN_KEY_FILE"
-ext."signing.password" = "$System.env.MAVEN_SIGN_KEY_PASSWORD"
+ext.'signing.keyId' = "$System.env.MAVEN_SIGN_KEY_ID"
+ext.'signing.secretKeyRingFile' = "$System.env.MAVEN_SIGN_KEY_FILE"
+ext.'signing.password' = "$System.env.MAVEN_SIGN_KEY_PASSWORD"
 
 repositories {
     mavenCentral()
@@ -89,12 +76,12 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 task sourcesJar(type: Jar) {
-    classifier "sources"
+    classifier 'sources'
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier "javadoc"
+    classifier 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -112,18 +99,23 @@ javadoc {
     }
 }
 
+release {
+    git {
+        requireBranch = 'release'
+        pushReleaseVersionBranch = 'true'
+    }
+}
+
 uploadArchives {
   repositories {
     mavenDeployer {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
       
-      def repoUrl = 'https://oss.sonatype.org/' + (isSnapshot() ? 'content/repositories/snapshots/' : 'service/local/staging/deploy/maven2/')
-      
-      repository(url: "$repoUrl") {
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
         authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
       }
 
-      snapshotRepository(url: "$repoUrl") {
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
         authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
       }
 

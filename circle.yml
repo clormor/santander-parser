@@ -14,7 +14,21 @@ jobs:
       - store_test_results:
           path: build/test-results/test
 
-  publish:
+  publish-snapshot:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    
+    steps:
+      - checkout
+      - run:
+          name: Prepare for signing
+          command: scripts/prepare-for-signing.sh
+      - run: ./gradlew --info --refresh-dependencies clean uploadArchives
+      - run: ./gradlew --info closeAndReleaseRepository
+      - store_test_results:
+          path: build/test-results/test
+
+  publish-release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     
@@ -30,13 +44,21 @@ jobs:
 
 workflows:
   version: 2
+  verify:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - release
   publish-snapshot:
     jobs:
       - build:
           filters:
             branches:
               only: develop
-      - publish:
+      - publish-snapshot:
           requires:
             - build
           filters:
@@ -47,15 +69,15 @@ workflows:
       - build:
           filters:
             branches:
-              ignore: /.*/
+              only: release
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
-      - publish:
+      - publish-release:
           requires:
             - build
           filters:
             branches:
-              ignore: /.*/
+              only: release
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
 
