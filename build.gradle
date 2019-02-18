@@ -18,6 +18,8 @@ plugins {
     id 'net.researchgate.release' version '2.8.0'
 }
 
+apply plugin: 'io.codearte.nexus-staging'
+
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
