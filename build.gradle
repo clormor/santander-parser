@@ -99,3 +99,34 @@ nexusStaging {
     delayBetweenRetriesInMillis = 5000
 }
 
+modifyPom {
+    project {
+        name 'Santander Parser'
+        description 'Java library for parsing Santander UK bank and credit card statements.'
+        url 'https://github.com/clormor/santander-parser'
+        inceptionYear '2019'
+
+        scm {
+            url 'https://github.com/clormor/santander-parser'
+            connection 'git@github.com:clormor/santander-parser.git'
+            developerConnection 'git@github.com:clormor/santander-parser.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'clormor'
+                name 'Chris Lormor'
+                email 'cdlormor@gmail.com'
+            }
+        }
+    }
+}
+
