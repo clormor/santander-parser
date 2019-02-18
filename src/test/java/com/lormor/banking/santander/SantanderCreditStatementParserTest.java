@@ -1,5 +1,6 @@
 package com.lormor.banking.santander;
 
+import com.lormor.banking.Expense;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,13 +9,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
-public class RowParserTest {
+public class SantanderCreditStatementParserTest {
 
-    private RowParser parser;
+    private SantanderCreditStatementParser parser;
 
     @Before
     public void setup() {
-        parser = new RowParser();
+        parser = new SantanderCreditStatementParser();
     }
 
     @Test
@@ -43,7 +44,7 @@ public class RowParserTest {
         assertEquals(12, date.getMonthOfYear());
         assertEquals(DateTime.now().getYear(), date.getYear());
 
-        parser = new RowParser(2015, true);
+        parser = new SantanderCreditStatementParser(2015, true);
         date = parser.parseDate("5th Dec");
         assertEquals(5, date.getDayOfMonth());
         assertEquals(12, date.getMonthOfYear());
@@ -69,7 +70,7 @@ public class RowParserTest {
         assertEquals(1, date.getMonthOfYear());
         assertEquals(2015, date.getYear());
 
-        parser = new RowParser(2015, false);
+        parser = new SantanderCreditStatementParser(2015, false);
         date = parser.parseDate("5th Dec");
         assertEquals(5, date.getDayOfMonth());
         assertEquals(12, date.getMonthOfYear());

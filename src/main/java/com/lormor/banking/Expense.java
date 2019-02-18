@@ -1,4 +1,4 @@
-package com.lormor.banking.santander;
+package com.lormor.banking;
 
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
