@@ -4,6 +4,7 @@ buildscript {
   }
   dependencies {
     classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0'
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
 
@@ -18,6 +19,7 @@ plugins {
     id 'net.researchgate.release' version '2.8.0'
 }
 
+apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'io.codearte.nexus-staging'
 
 sourceCompatibility = '1.8'
@@ -77,24 +79,6 @@ task integrationTest(type: Test) {
 
 check.dependsOn integrationTest
 
-task sourcesJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allJava
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
-
 javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
@@ -108,46 +92,46 @@ release {
     }
 }
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-      
-      def artifactRepoBase='https://oss.sonatype.org'
-      def repoUrl = "${artifactRepoBase}/${project.version.contains('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }"
-      repository(url: "$repoUrl") {
-        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
-      }
+//uploadArchives {
+//  repositories {
+//    mavenDeployer {
+//      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//      
+//      def artifactRepoBase='https://oss.sonatype.org'
+//      def repoUrl = "${artifactRepoBase}/${project.version.contains('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }"
+//      repository(url: "$repoUrl") {
+//        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
+//      }
 
-      pom.project {
-        name 'Santander Parser'
-        packaging 'jar'
+//      pom.project {
+//        name 'Santander Parser'
+//        packaging 'jar'
         // optionally artifactId can be defined here
-        description 'Library for parsing UK Santander bank and credit card statements'
-        url 'https://github.com/clormor/santander-parser'
+//        description 'Library for parsing UK Santander bank and credit card statements'
+  //      url 'https://github.com/clormor/santander-parser'
 
-        scm {
-          connection 'git@github.com:clormor/santander-parser.git'
-          developerConnection 'git@github.com:clormor/santander-parser.git'
-          url 'https://github.com/clormor/santander-parser'
-        }
-
-        licenses {
-          license {
-            name 'The Apache License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          }
-        }
-
-        developers {
-          developer {
-            id 'clormor'
-            name 'Chris Lormor'
-            email 'cdlormor@gmail.com'
-          }
-        }
-      }
-    }
-  }
-}
+//        scm {
+//          connection 'git@github.com:clormor/santander-parser.git'
+//          developerConnection 'git@github.com:clormor/santander-parser.git'
+//          url 'https://github.com/clormor/santander-parser'
+//        }
+//
+//        licenses {
+//          license {
+//            name 'The Apache License, Version 2.0'
+//            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//          }
+//        }
+//
+//        developers {
+//          developer {
+//            id 'clormor'
+//            name 'Chris Lormor'
+//            email 'cdlormor@gmail.com'
+//          }
+//        }
+//     }
+//    }
+//  }
+//}
 
