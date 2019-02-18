@@ -68,7 +68,7 @@ workflows:
       - build:
           filters:
             branches:
-              only: release
+              ignore: /.*/
             tags:
               only: /[0-9]+(\.[0-9]+)*/
       - publish-release:
@@ -76,7 +76,7 @@ workflows:
             - build
           filters:
             branches:
-              only: release
+              ignore: /.*/
             tags:
               only: /[0-9]+(\.[0-9]+)*/
 
