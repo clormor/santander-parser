@@ -24,7 +24,6 @@ jobs:
           name: Prepare for signing
           command: scripts/prepare-for-signing.sh
       - run: ./gradlew --info --refresh-dependencies clean uploadArchives
-      - run: ./gradlew --info closeAndReleaseRepository
       - store_test_results:
           path: build/test-results/test
 
