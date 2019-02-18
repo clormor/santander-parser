@@ -22,6 +22,9 @@ plugins {
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'io.codearte.nexus-staging'
 
+nexusUsername = "$System.env.MAVEN_USER"
+nexusPassword = "$System.env.MAVEN_PASSWORD"
+
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
