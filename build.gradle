@@ -113,7 +113,11 @@ uploadArchives {
     mavenDeployer {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
       
-      def artifactRepoBase='https://oss.sonatype.org/'
+      def artifactRepoBase='https://oss.sonatype.org'
+
+      println "HELLLLLLOOOOOOOO!!!!! version: ${project.version}"
+      println ${project.version.endsWith('-SNAPSHOT')
+
       def repoUrl = "${artifactRepoBase}/${project.version.endsWith('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }"
       repository(url: "$repoUrl") {
         authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
