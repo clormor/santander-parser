@@ -1,6 +1,6 @@
 package com.lormor.banking.santander;
 
-import com.lormor.banking.Expense;
+import com.lormor.banking.expense.Expense;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
