@@ -90,51 +90,8 @@ javadoc {
 
 release {
     git {
-        requireBranch = 'release'
-        pushReleaseVersionBranch = 'true'
+        requireBranch = 'develop'
+        pushReleaseVersionBranch = 'release'
     }
 }
-
-//uploadArchives {
-//  repositories {
-//    mavenDeployer {
-//      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//      
-//      def artifactRepoBase='https://oss.sonatype.org'
-//      def repoUrl = "${artifactRepoBase}/${project.version.contains('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }"
-//      repository(url: "$repoUrl") {
-//        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
-//      }
-
-//      pom.project {
-//        name 'Santander Parser'
-//        packaging 'jar'
-        // optionally artifactId can be defined here
-//        description 'Library for parsing UK Santander bank and credit card statements'
-  //      url 'https://github.com/clormor/santander-parser'
-
-//        scm {
-//          connection 'git@github.com:clormor/santander-parser.git'
-//          developerConnection 'git@github.com:clormor/santander-parser.git'
-//          url 'https://github.com/clormor/santander-parser'
-//        }
-//
-//        licenses {
-//          license {
-//            name 'The Apache License, Version 2.0'
-//            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//          }
-//        }
-//
-//        developers {
-//          developer {
-//            id 'clormor'
-//            name 'Chris Lormor'
-//            email 'cdlormor@gmail.com'
-//          }
-//        }
-//     }
-//    }
-//  }
-//}
 
