@@ -95,3 +95,7 @@ release {
     }
 }
 
+nexusStaging {
+    delayBetweenRetriesInMillis = 5000
+}
+
