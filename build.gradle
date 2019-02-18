@@ -114,14 +114,10 @@ uploadArchives {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
       
       def artifactRepoBase='https://oss.sonatype.org/'
-      repository(url "${artifactRepoBase}/${project.version.endsWith('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }" {
-//      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+      def repoUrl = "${artifactRepoBase}/${project.version.endsWith('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2' }"
+      repository(url: "$repoUrl") {
         authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
       }
-
-//      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//        authentication(userName: "$System.env.MAVEN_USER", password: "$System.env.MAVEN_PASSWORD")
-//      }
 
       pom.project {
         name 'Santander Parser'
