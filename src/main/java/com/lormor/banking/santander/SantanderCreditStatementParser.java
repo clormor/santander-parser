@@ -2,8 +2,8 @@ package com.lormor.banking.santander;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.lormor.banking.Expense;
-import com.lormor.banking.ImmutableExpense;
+import com.lormor.banking.expense.Expense;
+import com.lormor.banking.expense.ImmutableExpense;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -30,14 +30,6 @@ public class SantanderCreditStatementParser {
 
     public SantanderCreditStatementParser() {
         this(DateTime.now().getYear(), false);
-    }
-
-    public SantanderCreditStatementParser(int year) {
-        this(year, false);
-    }
-
-    public SantanderCreditStatementParser(boolean wrapYear) {
-        this(DateTime.now().getYear(), wrapYear);
     }
 
     public SantanderCreditStatementParser(int year, boolean wrapYear) {
