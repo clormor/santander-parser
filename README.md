@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/circleci/project/github/clormor/santander-parser.svg?style=plastic" />
     </a>
     <a href="https://maven-badges.herokuapp.com/maven-central/io.github.clormor/santander-parser">
-        <img src="https://maven-badges.herokuapp.com/maven-central/io.github.clormor/santander-parser/badge.svg" />
+        <img src="https://img.shields.io/maven-central/v/io.github.clormor/santander-parser.svg?style=plastic" />
     </a>
     <a href="https://codeclimate.com/github/clormor/santander-parser">
         <img src="https://img.shields.io/codeclimate/coverage/clormor/santander-parser.svg?style=plastic" />
