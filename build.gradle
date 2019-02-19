@@ -11,6 +11,7 @@ buildscript {
 plugins {
     id 'java'
     id 'jacoco'
+    id 'findbugs'
     id 'eclipse'
     id 'idea'
     id 'maven'
@@ -49,6 +50,7 @@ dependencies {
     compile "com.google.guava:guava:$guavaVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "org.apache.pdfbox:pdfbox:$pdfBoxVersion"
+    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     implementation "org.immutables:value-annotations:$immutablesVersion"
     annotationProcessor "org.immutables:value:$immutablesVersion"
 	testCompile "junit:junit:$junitVersion"

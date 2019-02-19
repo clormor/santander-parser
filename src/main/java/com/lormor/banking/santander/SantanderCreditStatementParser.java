@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ImmutableExpense;
+import com.lormor.banking.expense.NotValidExpenseException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

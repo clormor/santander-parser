@@ -53,7 +53,7 @@ public class ExpenseCategoriserTest {
             @Override
             public Boolean apply(Expense expense) {
                 fail("This rule should never be run");
-                return null;
+                return false;
             }
         });
         categoriser = new ExpenseCategoriser(rules);
