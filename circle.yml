@@ -6,9 +6,7 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
 
     environment:
-      JVM_OPTS: -Xmx3200m
-      CC_TEST_REPORTER_ID:8f9157d88dee12534c3b3119c8e48a52348a3ebb9ff25ffe9f05e71224bfbc6f
-      ADB_INSTALL_TIMEOUT: 60
+      CC_TEST_REPORTER_ID: 8f9157d88dee12534c3b3119c8e48a52348a3ebb9ff25ffe9f05e71224bfbc6f
 
     steps:
       - checkout
