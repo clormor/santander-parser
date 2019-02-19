@@ -4,20 +4,47 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-    
+
+    environment:
+      JVM_OPTS: -Xmx3200m
+      CC_TEST_REPORTER_ID:8f9157d88dee12534c3b3119c8e48a52348a3ebb9ff25ffe9f05e71224bfbc6f
+      ADB_INSTALL_TIMEOUT: 60
+
     steps:
       - checkout
+
       - run:
-          name: Prepare for signing
+          name: Generate signing secret
           command: scripts/prepare-for-signing.sh
-      - run: ./gradlew --info --refresh-dependencies clean build
+
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
+      - run:
+          name: Run Tests
+          command: ./gradlew --info --refresh-dependencies clean build
+
       - store_test_results:
           path: build/test-results/test
+
+      - store_artifacts:
+          path: build/reports
+          destination: reports
+
+      - run:
+          name: Upload coverage to code climate
+          command: |
+            export JACOCO_SOURCE_PATH=src/main/java
+            ./cc-test-reporter format-coverage build/reports/jacoco/test/jacocoTestReport.xml -t jacoco
+            ./cc-test-reporter upload-coverage
 
   publish-snapshot:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-    
+
     steps:
       - checkout
       - run:
@@ -30,7 +57,7 @@ jobs:
   publish-release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-    
+
     steps:
       - checkout
       - run:
