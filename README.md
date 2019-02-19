@@ -1,6 +1,6 @@
 # santander-parser
 
-<p align=""center">
+<p align="center">
     <a href="https://circleci.com/gh/clormor/santander-parser/tree/develop">
         <img src="https://circleci.com/gh/clormor/santander-parser/tree/develop.svg?style=svg" />
     </a>
