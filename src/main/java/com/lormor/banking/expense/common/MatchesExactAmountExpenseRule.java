@@ -1,13 +1,14 @@
 package com.lormor.banking.expense.common;
 
 import com.lormor.banking.expense.Expense;
-import com.lormor.banking.expense.ExpenseRule;
 
-public class AmountMatchesExpenseRule extends ExpenseRule {
+import java.util.function.Function;
+
+public class MatchesExactAmountExpenseRule implements Function<Expense, Boolean> {
 
     private Double amount;
 
-    public AmountMatchesExpenseRule(Double amount) {
+    public MatchesExactAmountExpenseRule(Double amount) {
         this.amount = amount;
     }
 

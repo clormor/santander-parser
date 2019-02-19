@@ -32,14 +32,6 @@ public class SantanderCreditStatementParser {
         this(DateTime.now().getYear(), false);
     }
 
-    public SantanderCreditStatementParser(int year) {
-        this(year, false);
-    }
-
-    public SantanderCreditStatementParser(boolean wrapYear) {
-        this(DateTime.now().getYear(), wrapYear);
-    }
-
     public SantanderCreditStatementParser(int year, boolean wrapYear) {
         this.year = year;
         this.wrapYear = wrapYear;
