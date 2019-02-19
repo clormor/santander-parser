@@ -1,7 +1,7 @@
 # santander-parser
 
 <p align="center">
-    <a href="https://circleci.com/gh/clormor/santander-parser/tree">
+    <a href="https://circleci.com/gh/clormor/santander-parser">
         <img src="https://img.shields.io/circleci/project/github/clormor/santander-parser.svg?style=plastic" />
     </a>
     <a href="https://maven-badges.herokuapp.com/maven-central/io.github.clormor/santander-parser">
