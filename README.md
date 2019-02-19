@@ -16,6 +16,9 @@
     <a href="https://codeclimate.com/github/clormor/santander-parser">
         <img src="https://img.shields.io/codeclimate/coverage/clormor/santander-parser.svg?style=plastic" />
     </a>
+    <a href="https://codeclimate.com/github/clormor/santander-parser/issues">
+        <img src="https://img.shields.io/codeclimate/maintainability/clormor/santander-parser.svg?style=plastic" />
+    </a>
 </p>
 
 A java library that parses Santander UK bank and credit card statements.
