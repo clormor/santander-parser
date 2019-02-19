@@ -24,16 +24,16 @@ plugins {
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'io.codearte.nexus-staging'
 
-ext.nexusUsername = "$System.env.MAVEN_USER"
-ext.nexusPassword = "$System.env.MAVEN_PASSWORD"
+ext.nexusUsername = "$System.env.NEXUS_USER"
+ext.nexusPassword = "$System.env.NEXUS_PASSWORD"
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
 
-ext.'signing.keyId' = "$System.env.MAVEN_SIGN_KEY_ID"
-ext.'signing.secretKeyRingFile' = "$System.env.MAVEN_SIGN_KEY_FILE"
-ext.'signing.password' = "$System.env.MAVEN_SIGN_KEY_PASSWORD"
+ext.'signing.keyId' = "$System.env.NEXUS_KEY_ID"
+ext.'signing.secretKeyRingFile' = "$System.env.NEXUS_KEY_FILE"
+ext.'signing.password' = "$System.env.NEXUS_KEY_PASSWORD"
 
 repositories {
     mavenCentral()
@@ -150,3 +150,4 @@ modifyPom {
         }
     }
 }
+
