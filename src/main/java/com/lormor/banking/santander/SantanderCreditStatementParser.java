@@ -2,6 +2,9 @@ package com.lormor.banking.santander;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.lormor.banking.expense.Expense;
+import com.lormor.banking.expense.ImmutableExpense;
+import com.lormor.banking.expense.NotValidExpenseException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -14,7 +17,7 @@ import java.util.Locale;
 /**
  * Parses a row of a credit card statement
  */
-public class RowParser {
+public class SantanderCreditStatementParser {
 
     private static final String CREDIT_PREFIX = "CR";
     // If a statement spans 2 years, then any December dates occur in the previous year
@@ -26,19 +29,11 @@ public class RowParser {
     private final DateTimeFormatter thFormatter;
     private final NumberFormat format = NumberFormat.getInstance(Locale.UK);
 
-    public RowParser() {
+    public SantanderCreditStatementParser() {
         this(DateTime.now().getYear(), false);
     }
 
-    public RowParser(int year) {
-        this(year, false);
-    }
-
-    public RowParser(boolean wrapYear) {
-        this(DateTime.now().getYear(), wrapYear);
-    }
-
-    public RowParser(int year, boolean wrapYear) {
+    public SantanderCreditStatementParser(int year, boolean wrapYear) {
         this.year = year;
         this.wrapYear = wrapYear;
         ndFormatter = DateTimeFormat.forPattern("d'nd' MMM").withDefaultYear(year);

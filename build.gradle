@@ -10,6 +10,8 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'findbugs'
     id 'eclipse'
     id 'idea'
     id 'maven'
@@ -22,16 +24,16 @@ plugins {
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'io.codearte.nexus-staging'
 
-ext.nexusUsername = "$System.env.MAVEN_USER"
-ext.nexusPassword = "$System.env.MAVEN_PASSWORD"
+ext.nexusUsername = "$System.env.NEXUS_USER"
+ext.nexusPassword = "$System.env.NEXUS_PASSWORD"
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 group = 'io.github.clormor'
 
-ext.'signing.keyId' = "$System.env.MAVEN_SIGN_KEY_ID"
-ext.'signing.secretKeyRingFile' = "$System.env.MAVEN_SIGN_KEY_FILE"
-ext.'signing.password' = "$System.env.MAVEN_SIGN_KEY_PASSWORD"
+ext.'signing.keyId' = "$System.env.NEXUS_KEY_ID"
+ext.'signing.secretKeyRingFile' = "$System.env.NEXUS_KEY_FILE"
+ext.'signing.password' = "$System.env.NEXUS_KEY_PASSWORD"
 
 repositories {
     mavenCentral()
@@ -48,6 +50,7 @@ dependencies {
     compile "com.google.guava:guava:$guavaVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "org.apache.pdfbox:pdfbox:$pdfBoxVersion"
+    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     implementation "org.immutables:value-annotations:$immutablesVersion"
     annotationProcessor "org.immutables:value:$immutablesVersion"
 	testCompile "junit:junit:$junitVersion"
@@ -71,6 +74,22 @@ idea {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+    }
+}
+
 task integrationTest(type: Test) {
     description = 'Runs the integration tests.'
     group = 'verification'
@@ -81,6 +100,8 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
 
 javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
