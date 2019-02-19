@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'jacoco'
     id 'eclipse'
     id 'idea'
     id 'maven'
@@ -71,6 +72,22 @@ idea {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.1
+            }
+        }
+    }
+}
+
 task integrationTest(type: Test) {
     description = 'Runs the integration tests.'
     group = 'verification'
@@ -81,6 +98,8 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
 
 javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
@@ -129,4 +148,3 @@ modifyPom {
         }
     }
 }
-
