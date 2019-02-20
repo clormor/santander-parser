@@ -124,13 +124,13 @@ modifyPom {
     project {
         name 'Santander Parser'
         description 'Java library for parsing Santander UK bank and credit card statements.'
-        url 'https://github.com/clormor/santander-parser'
+        url 'https://github.com/clormor/statements-parser'
         inceptionYear '2019'
 
         scm {
-            url 'https://github.com/clormor/santander-parser'
-            connection 'git@github.com:clormor/santander-parser.git'
-            developerConnection 'git@github.com:clormor/santander-parser.git'
+            url 'https://github.com/clormor/statements-parser'
+            connection 'git@github.com:clormor/statements-parser.git'
+            developerConnection 'git@github.com:clormor/statements-parser.git'
         }
 
         licenses {

@@ -1,4 +1,4 @@
-package com.lormor.banking.santander;
+package com.lormor.banking.statements;
 
 import com.google.common.collect.Lists;
 import com.lormor.banking.expense.Expense;

@@ -1,7 +1,7 @@
 package com.lormor.banking.expense;
 
 import com.google.common.collect.LinkedListMultimap;
-import com.lormor.banking.expense.common.MatchesExactAmountExpenseRule;
+import com.lormor.banking.expense.rules.MatchesExactAmountExpenseRule;
 import org.junit.Before;
 import org.junit.Test;
 

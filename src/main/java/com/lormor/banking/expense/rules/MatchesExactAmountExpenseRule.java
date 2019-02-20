@@ -1,4 +1,4 @@
-package com.lormor.banking.expense.common;
+package com.lormor.banking.expense.rules;
 
 import com.lormor.banking.expense.Expense;
 

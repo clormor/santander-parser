@@ -1,7 +1,7 @@
-package com.lormor.banking.santander;
+package com.lormor.banking.statements;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ImmutableExpense;
 import com.lormor.banking.expense.NotValidExpenseException;
@@ -11,13 +11,12 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Locale;
 
 /**
  * Parses a row of a credit card statement
  */
-public class SantanderCreditStatementParser {
+public class SantanderCreditStatementParser extends AbstractStatementParser {
 
     private static final String CREDIT_PREFIX = "CR";
     // If a statement spans 2 years, then any December dates occur in the previous year
@@ -42,23 +41,8 @@ public class SantanderCreditStatementParser {
         thFormatter = DateTimeFormat.forPattern("d'th' MMM").withDefaultYear(year);
     }
 
-    public List<Expense> parse(List<String> lines) {
-        List<Expense> result = Lists.newArrayList();
-
-        for (String line : lines) {
-
-            try {
-                Expense expense = parseLine(line);
-                result.add(expense);
-            } catch (NotValidExpenseException e) {
-                // TODO continue or break?
-                continue;
-            }
-        }
-        return result;
-    }
-
-    Expense parseLine(String line) throws NotValidExpenseException {
+    @Override
+    protected Expense parseLine(String line) throws NotValidExpenseException {
         if (Strings.isNullOrEmpty(line)) {
             throw new NotValidExpenseException();
         }
@@ -88,6 +72,7 @@ public class SantanderCreditStatementParser {
         }
     }
 
+    @VisibleForTesting
     DateTime parseDate(String date) {
         DateTime result;
 
@@ -109,15 +94,6 @@ public class SantanderCreditStatementParser {
             return result.minusYears(1);
         } else {
             return result;
-        }
-    }
-
-    public boolean isValidExpenseLine(String line) {
-        try {
-            parseLine(line);
-            return true;
-        } catch (NotValidExpenseException e) {
-            return false;
         }
     }
 }
