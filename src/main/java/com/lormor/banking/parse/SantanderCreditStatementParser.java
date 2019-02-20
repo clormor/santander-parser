@@ -1,11 +1,10 @@
-package com.lormor.banking.statements.parsers;
+package com.lormor.banking.parse;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ImmutableExpense;
 import com.lormor.banking.expense.NotValidExpenseException;
-import com.lormor.banking.statements.parsers.AbstractStatementParser;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -29,11 +28,11 @@ class SantanderCreditStatementParser extends AbstractStatementParser {
     private final DateTimeFormatter thFormatter;
     private final NumberFormat format = NumberFormat.getInstance(Locale.UK);
 
-    public SantanderCreditStatementParser() {
+    SantanderCreditStatementParser() {
         this(DateTime.now().getYear(), false);
     }
 
-    public SantanderCreditStatementParser(int year, boolean wrapYear) {
+    SantanderCreditStatementParser(int year, boolean wrapYear) {
         this.year = year;
         this.wrapYear = wrapYear;
         ndFormatter = DateTimeFormat.forPattern("d'nd' MMM").withDefaultYear(year);
@@ -49,13 +48,13 @@ class SantanderCreditStatementParser extends AbstractStatementParser {
         }
 
         line = line.trim();
-        int descStart = line.indexOf(" ", line.indexOf(" ", 0) + 1) + 1;
+        int descStart = line.indexOf(" ", line.indexOf(" ") + 1) + 1;
         int descEnd = line.lastIndexOf(" ");
 
         try {
             DateTime date = parseDate(line.substring(0, descStart).trim());
             String description = line.substring(descStart, descEnd).trim();
-            Double amount = format.parse(line.substring(descEnd + 1)).doubleValue();
+            double amount = format.parse(line.substring(descEnd + 1)).doubleValue();
 
             if (description.endsWith(CREDIT_PREFIX)) {
                 description = description.substring(0, description.lastIndexOf(" "));

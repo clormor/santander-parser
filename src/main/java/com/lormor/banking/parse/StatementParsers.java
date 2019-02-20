@@ -1,4 +1,4 @@
-package com.lormor.banking.statements.parsers;
+package com.lormor.banking.parse;
 
 public class StatementParsers {
 
