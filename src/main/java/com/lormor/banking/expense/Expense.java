@@ -2,7 +2,6 @@ package com.lormor.banking.expense;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.immutables.value.Value;
-import org.immutables.value.Value.Default;
 import org.joda.time.DateTime;
 
 @SuppressFBWarnings
