@@ -1,6 +1,8 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.processors;
 
 import com.lormor.banking.expense.Expense;
+import com.lormor.banking.statements.NotValidStatementException;
+import com.lormor.banking.statements.parsers.StatementParsers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,28 +27,28 @@ public class StatementProcessorTest {
     }
 
     @Test
-    public void load_simple_pdf() {
+    public void load_simple_pdf() throws NotValidStatementException {
         File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_PDF).getFile());
         List<String> lines = loader.getLinesFromFile(testFile);
         assertEquals(1, lines.size());
     }
 
     @Test(expected = NotValidStatementException.class)
-    public void load_image_file() {
+    public void load_image_file() throws NotValidStatementException {
         File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_JPG).getFile());
         loader.getLinesFromFile(testFile);
         fail("Expected NotValidStatementException when opening non-pdf files");
     }
 
     @Test(expected = NotValidStatementException.class)
-    public void load_text_file() {
+    public void load_text_file() throws NotValidStatementException {
         File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_TXT).getFile());
         loader.getLinesFromFile(testFile);
         fail("Expected NotValidStatementException when opening non-pdf files");
     }
 
     @Test(expected = NotValidStatementException.class)
-    public void load_directory_as_file() {
+    public void load_directory_as_file() throws NotValidStatementException {
         File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_DIR).getFile());
         loader.getLinesFromFile(testFile);
         fail("Expected NotValidStatementException when opening non-pdf files");
@@ -60,10 +62,10 @@ public class StatementProcessorTest {
     }
 
     @Test
-    public void process_simple_pdf() {
+    public void process_simple_pdf() throws NotValidStatementException {
         File testDir = new File(getClass().getClassLoader().getResource(EXAMPLE_DIR).getFile());
         List<File> files = loader.loadPdfFilesFromDirectory(testDir);
-        List<Expense> expenses = loader.processExpenses(files.get(0), new SantanderCreditStatementParser());
+        List<Expense> expenses = loader.processExpenses(files.get(0), StatementParsers.santanderCreditCardStatementParser());
         assertEquals(0, expenses.size());
     }
 

@@ -1,8 +1,9 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.parsers;
 
 import com.google.common.collect.Lists;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.NotValidExpenseException;
+import com.lormor.banking.statements.parsers.SantanderCreditStatementParser;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;

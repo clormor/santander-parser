@@ -1,10 +1,12 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.processors;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ExpenseCategoriser;
+import com.lormor.banking.statements.NotValidStatementException;
+import com.lormor.banking.statements.parsers.StatementParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -12,14 +14,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
-
-public class StatementProcessors {
-
-    public static final DefaultStatementProcessor create() {
-        return new DefaultStatementProcessor();
-    }
-
-}
 
 class DefaultStatementProcessor implements StatementProcessor {
     private static final FileFilter PDF_FILE_FILTER = new FileFilter() {
@@ -31,7 +25,7 @@ class DefaultStatementProcessor implements StatementProcessor {
     };
 
     @VisibleForTesting
-    List<String> getLinesFromFile(File file) throws NotValidStatementException {
+    public List<String> getLinesFromFile(File file) throws NotValidStatementException {
         try {
             PDFTextStripper stripper = new PDFTextStripper();
             PDDocument doc = PDDocument.load(file);
@@ -52,7 +46,7 @@ class DefaultStatementProcessor implements StatementProcessor {
     }
 
     @Override
-    public List<Expense> processExpenses(File file, StatementParser parser) {
+    public List<Expense> processExpenses(File file, StatementParser parser) throws NotValidStatementException {
         return parser.parse(getLinesFromFile(file));
     }
 

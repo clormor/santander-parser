@@ -1,10 +1,11 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.parsers;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ImmutableExpense;
 import com.lormor.banking.expense.NotValidExpenseException;
+import com.lormor.banking.statements.parsers.AbstractStatementParser;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

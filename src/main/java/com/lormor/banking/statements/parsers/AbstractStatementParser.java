@@ -1,4 +1,4 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.parsers;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;

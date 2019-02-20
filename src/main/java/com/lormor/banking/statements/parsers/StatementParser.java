@@ -1,4 +1,4 @@
-package com.lormor.banking.statements;
+package com.lormor.banking.statements.parsers;
 
 import com.lormor.banking.expense.Expense;
 
