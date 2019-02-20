@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface StatementProcessor {
 
-    List<File> loadPdfFilesFromDirectory(File directory);
-
     List<Expense> processExpenses(File file, StatementParser parser) throws NotValidStatementException;
 
     Multimap<String, Expense> categoriseExpenses(List<Expense> expenses, ExpenseCategoriser categoriser);

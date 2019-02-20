@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 class DefaultStatementProcessor implements StatementProcessor {
+
     private static final FileFilter PDF_FILE_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
@@ -39,15 +40,34 @@ class DefaultStatementProcessor implements StatementProcessor {
         }
     }
 
-    @Override
+    @VisibleForTesting
     public List<File> loadPdfFilesFromDirectory(File directory) {
         File[] files = directory.listFiles(PDF_FILE_FILTER);
         return Lists.newArrayList(files);
     }
 
+    private List<Expense> processFile(File file, StatementParser parser) {
+        try {
+           return parser.parse(getLinesFromFile(file));
+        } catch (NotValidStatementException e) {
+            return Lists.newArrayList();
+        }
+    }
+
     @Override
-    public List<Expense> processExpenses(File file, StatementParser parser) throws NotValidStatementException {
-        return parser.parse(getLinesFromFile(file));
+    public List<Expense> processExpenses(File file, StatementParser parser) {
+        if (file.isDirectory()) {
+            List<File> files = loadPdfFilesFromDirectory(file);
+
+            List<Expense> result = Lists.newArrayList();
+            for (File child : files) {
+                result.addAll(processFile(child, parser));
+            }
+
+            return result;
+        } else {
+            return processFile(file, parser);
+        }
     }
 
     @Override

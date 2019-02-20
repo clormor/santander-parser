@@ -62,10 +62,16 @@ public class StatementProcessorTest {
     }
 
     @Test
-    public void process_simple_pdf() throws NotValidStatementException {
+    public void process_simple_pdf() {
+        File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_PDF).getFile());
+        List<Expense> expenses = loader.processExpenses(testFile, StatementParsers.santanderCreditCardStatementParser());
+        assertEquals(0, expenses.size());
+    }
+
+    @Test
+    public void process_directory() {
         File testDir = new File(getClass().getClassLoader().getResource(EXAMPLE_DIR).getFile());
-        List<File> files = loader.loadPdfFilesFromDirectory(testDir);
-        List<Expense> expenses = loader.processExpenses(files.get(0), StatementParsers.santanderCreditCardStatementParser());
+        List<Expense> expenses = loader.processExpenses(testDir, StatementParsers.santanderCreditCardStatementParser());
         assertEquals(0, expenses.size());
     }
 
