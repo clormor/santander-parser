@@ -22,7 +22,7 @@ public class ExpenseCategoriserTest {
     }
 
     @Test
-    public void test_simple_rule_match() {
+    public void simple_rule_match() {
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         categoriser = new ExpenseCategoriser(rules);
 
@@ -34,7 +34,7 @@ public class ExpenseCategoriserTest {
     }
 
     @Test
-    public void test_rule_ordering_preserved() {
+    public void rule_ordering_preserved() {
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         rules.put("some other category", ExpenseRules.amountMatchesRule(10.0));
         rules.put("another category", ExpenseRules.amountMatchesRule(10.0));
@@ -46,9 +46,20 @@ public class ExpenseCategoriserTest {
     }
 
     @Test
-    public void test_ordering_preserved_if_keys_match() {
+    public void ordering_preserved_if_keys_match() {
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         rules.put(TEST_CATEGORY, ExpenseRules.throwExceptionRule());
+        categoriser = new ExpenseCategoriser(rules);
+
+        Expense matching = ImmutableExpense.builder().amount(10.0).build();
+        assertEquals(TEST_CATEGORY, categoriser.categoriseExpense(matching));
+    }
+
+    // Same as above but check our test logic works by switching the order
+    @Test (expected = RuntimeException.class)
+    public void ordering_preserved_if_keys_match_reversed() {
+        rules.put(TEST_CATEGORY, ExpenseRules.throwExceptionRule());
+        rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         categoriser = new ExpenseCategoriser(rules);
 
         Expense matching = ImmutableExpense.builder().amount(10.0).build();

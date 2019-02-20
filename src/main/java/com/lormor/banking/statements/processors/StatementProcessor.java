@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface StatementProcessor {
 
-    List<Expense> processExpenses(File file, StatementParser parser) throws NotValidStatementException;
+    StatementProcessingResult processExpenses(File file, StatementParser parser) throws NotValidStatementException;
 
     Multimap<String, Expense> categoriseExpenses(List<Expense> expenses, ExpenseCategoriser categoriser);
 }

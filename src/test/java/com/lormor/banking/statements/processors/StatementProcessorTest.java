@@ -1,5 +1,6 @@
 package com.lormor.banking.statements.processors;
 
+import com.google.common.collect.Iterables;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.statements.NotValidStatementException;
 import com.lormor.banking.statements.parsers.StatementParsers;
@@ -55,23 +56,28 @@ public class StatementProcessorTest {
     }
 
     @Test
-    public void load_pdfs_from_directory() {
-        File testDir = new File(getClass().getClassLoader().getResource(EXAMPLE_DIR).getFile());
-        List<File> files = loader.loadPdfFilesFromDirectory(testDir);
-        assertEquals(2, files.size());
-    }
-
-    @Test
     public void process_simple_pdf() {
         File testFile = new File(getClass().getClassLoader().getResource(EXAMPLE_PDF).getFile());
-        List<Expense> expenses = loader.processExpenses(testFile, StatementParsers.santanderCreditCardStatementParser());
+        StatementProcessingResult result = loader.processExpenses(testFile, StatementParsers.santanderCreditCardStatementParser());
+        assertEquals(0, result.getSkippedFiles().size());
+        assertEquals(1, result.getProcessedFiles().size());
+        assertEquals(1, result.getProcessedFiles().keySet().size());
+
+        String key = Iterables.getOnlyElement(result.getProcessedFiles().keySet());
+        List<Expense> expenses = result.getProcessedFiles().get(key);
         assertEquals(0, expenses.size());
     }
 
     @Test
     public void process_directory() {
         File testDir = new File(getClass().getClassLoader().getResource(EXAMPLE_DIR).getFile());
-        List<Expense> expenses = loader.processExpenses(testDir, StatementParsers.santanderCreditCardStatementParser());
+        StatementProcessingResult result = loader.processExpenses(testDir, StatementParsers.santanderCreditCardStatementParser());
+        assertEquals(2, result.getSkippedFiles().size());
+        assertEquals(2, result.getProcessedFiles().size());
+        assertEquals(2, result.getProcessedFiles().keySet().size());
+
+        String key = Iterables.getFirst(result.getProcessedFiles().keySet(), "error");
+        List<Expense> expenses = result.getProcessedFiles().get(key);
         assertEquals(0, expenses.size());
     }
 

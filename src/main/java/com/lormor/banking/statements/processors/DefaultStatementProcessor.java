@@ -2,7 +2,9 @@ package com.lormor.banking.statements.processors;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ExpenseCategoriser;
 import com.lormor.banking.statements.NotValidStatementException;
@@ -13,17 +15,12 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class DefaultStatementProcessor implements StatementProcessor {
-
-    private static final FileFilter PDF_FILE_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            String name = pathname.getName();
-            return pathname.getName().substring(name.length() - 3, name.length()).equalsIgnoreCase("pdf");
-        }
-    };
 
     @VisibleForTesting
     public List<String> getLinesFromFile(File file) throws NotValidStatementException {
@@ -40,34 +37,36 @@ class DefaultStatementProcessor implements StatementProcessor {
         }
     }
 
-    @VisibleForTesting
-    public List<File> loadPdfFilesFromDirectory(File directory) {
-        File[] files = directory.listFiles(PDF_FILE_FILTER);
-        return Lists.newArrayList(files);
-    }
+    private StatementProcessingResult processFile(File file, StatementParser parser, StatementProcessingResult partialResult) {
+        Map<String, List<Expense>> processedFiles = partialResult.getProcessedFiles();
+        Set<String> skippedFiles = partialResult.getSkippedFiles();
 
-    private List<Expense> processFile(File file, StatementParser parser) {
         try {
-           return parser.parse(getLinesFromFile(file));
+            List<Expense> parse = parser.parse(getLinesFromFile(file));
+            processedFiles.put(file.getName(), parse);
         } catch (NotValidStatementException e) {
-            return Lists.newArrayList();
+            skippedFiles.add(file.getName());
         }
+
+        return new StatementProcessingResult(processedFiles, skippedFiles);
     }
 
     @Override
-    public List<Expense> processExpenses(File file, StatementParser parser) {
-        if (file.isDirectory()) {
-            List<File> files = loadPdfFilesFromDirectory(file);
+    public StatementProcessingResult processExpenses(File file, StatementParser parser) {
+        StatementProcessingResult result = new StatementProcessingResult(Maps.newLinkedHashMap(), Sets.newLinkedHashSet());
 
-            List<Expense> result = Lists.newArrayList();
+        if (file.isDirectory()) {
+            List<File> files = Lists.newArrayList(file.listFiles());
+
             for (File child : files) {
-                result.addAll(processFile(child, parser));
+                result = processFile(child, parser, result);
             }
 
-            return result;
         } else {
-            return processFile(file, parser);
+            result = processFile(file, parser, result);
         }
+
+        return result;
     }
 
     @Override
