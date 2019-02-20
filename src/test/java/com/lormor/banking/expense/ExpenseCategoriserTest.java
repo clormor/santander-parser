@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ExpenseCategoriserTest {
 
@@ -49,13 +48,7 @@ public class ExpenseCategoriserTest {
     @Test
     public void test_ordering_preserved_if_keys_match() {
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
-        rules.put(TEST_CATEGORY, new Function<Expense, Boolean>() {
-            @Override
-            public Boolean apply(Expense expense) {
-                fail("This rule should never be run");
-                return false;
-            }
-        });
+        rules.put(TEST_CATEGORY, ExpenseRules.throwExceptionRule());
         categoriser = new ExpenseCategoriser(rules);
 
         Expense matching = ImmutableExpense.builder().amount(10.0).build();
