@@ -16,7 +16,7 @@ import java.util.Locale;
 /**
  * Parses a row of a credit card statement
  */
-public class SantanderCreditStatementParser extends AbstractStatementParser {
+class SantanderCreditStatementParser extends AbstractStatementParser {
 
     private static final String CREDIT_PREFIX = "CR";
     // If a statement spans 2 years, then any December dates occur in the previous year

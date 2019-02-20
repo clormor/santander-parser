@@ -4,7 +4,7 @@ import com.lormor.banking.expense.Expense;
 
 import java.util.function.Function;
 
-public class AmountMatchesRule implements Function<Expense, Boolean> {
+class AmountMatchesRule implements Function<Expense, Boolean> {
 
     private Double amount;
 

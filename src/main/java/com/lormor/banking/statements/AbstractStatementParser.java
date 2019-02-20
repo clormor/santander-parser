@@ -7,7 +7,7 @@ import com.lormor.banking.expense.NotValidExpenseException;
 
 import java.util.List;
 
-public abstract class AbstractStatementParser implements StatementParser {
+abstract class AbstractStatementParser implements StatementParser {
 
     @Override
     public List<Expense> parse(List<String> lines) {
