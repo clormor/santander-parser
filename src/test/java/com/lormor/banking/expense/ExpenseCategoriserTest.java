@@ -1,7 +1,7 @@
 package com.lormor.banking.expense;
 
 import com.google.common.collect.LinkedListMultimap;
-import com.lormor.banking.expense.rules.MatchesExactAmountExpenseRule;
+import com.lormor.banking.expense.rules.ExpenseRules;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class ExpenseCategoriserTest {
 
     @Test
     public void test_simple_rule_match() {
-        rules.put(TEST_CATEGORY, new MatchesExactAmountExpenseRule(10.0));
+        rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         categoriser = new ExpenseCategoriser(rules);
 
         Expense matching = ImmutableExpense.builder().amount(10.0).build();
@@ -36,10 +36,10 @@ public class ExpenseCategoriserTest {
 
     @Test
     public void test_rule_ordering_preserved() {
-        rules.put(TEST_CATEGORY, new MatchesExactAmountExpenseRule(10.0));
-        rules.put("some other category", new MatchesExactAmountExpenseRule(10.0));
-        rules.put("another category", new MatchesExactAmountExpenseRule(10.0));
-        rules.put("yet another category", new MatchesExactAmountExpenseRule(10.0));
+        rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
+        rules.put("some other category", ExpenseRules.amountMatchesRule(10.0));
+        rules.put("another category", ExpenseRules.amountMatchesRule(10.0));
+        rules.put("yet another category", ExpenseRules.amountMatchesRule(10.0));
         categoriser = new ExpenseCategoriser(rules);
 
         Expense matching = ImmutableExpense.builder().amount(10.0).build();
@@ -48,7 +48,7 @@ public class ExpenseCategoriserTest {
 
     @Test
     public void test_ordering_preserved_if_keys_match() {
-        rules.put(TEST_CATEGORY, new MatchesExactAmountExpenseRule(10.0));
+        rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         rules.put(TEST_CATEGORY, new Function<Expense, Boolean>() {
             @Override
             public Boolean apply(Expense expense) {

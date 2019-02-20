@@ -4,11 +4,11 @@ import com.lormor.banking.expense.Expense;
 
 import java.util.function.Function;
 
-public class MatchesExactAmountExpenseRule implements Function<Expense, Boolean> {
+public class AmountMatchesRule implements Function<Expense, Boolean> {
 
     private Double amount;
 
-    public MatchesExactAmountExpenseRule(Double amount) {
+    public AmountMatchesRule(Double amount) {
         this.amount = amount;
     }
 
