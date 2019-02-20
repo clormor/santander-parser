@@ -23,7 +23,7 @@ public class StatementProcessorTest {
 
     @Before
     public void setup() {
-        loader = StatementProcessors.create();
+        loader = (DefaultStatementProcessor) StatementProcessors.create();
     }
 
     @Test
