@@ -64,10 +64,12 @@ abstract class AbstractStatementParser implements StatementParser {
         Set<String> skippedFiles = Sets.newLinkedHashSet();
 
         File[] children = Objects.requireNonNull(file.listFiles());
-        for (File child : children) {
-            ImmutableParseResult partialResult = parseFile(child);
-            expenses.putAll(partialResult.getExpenses());
-            skippedFiles.addAll(partialResult.getSkippedFiles());
+        if (children != null) {
+            for (File child : children) {
+                ImmutableParseResult partialResult = parseFile(child);
+                expenses.putAll(partialResult.getExpenses());
+                skippedFiles.addAll(partialResult.getSkippedFiles());
+            }
         }
 
         return ImmutableParseResult
