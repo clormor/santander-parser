@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+@SuppressWarnings("WeakerAccess")
 public class StatementCategorisers {
 
     public static final String CATEGORY_UNCATEGORISED = "UNCATEGORISED";

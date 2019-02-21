@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("WeakerAccess")
 @Value.Immutable
 public abstract class CategoriseResult {
 

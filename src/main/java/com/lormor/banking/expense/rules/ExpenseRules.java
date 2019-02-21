@@ -5,6 +5,7 @@ import com.lormor.banking.expense.Expense;
 
 import java.util.function.Function;
 
+@SuppressWarnings("WeakerAccess")
 public class ExpenseRules {
 
     public static AmountMatchesRule amountMatchesRule(double amount) {
@@ -13,11 +14,8 @@ public class ExpenseRules {
 
     @VisibleForTesting
     public static Function<Expense, Boolean> throwExceptionRule() {
-        return new Function<Expense, Boolean>() {
-            @Override
-            public Boolean apply(Expense expense) {
-                throw new RuntimeException("Thrown by throwExceptionRule() in " + ExpenseRules.class.getName());
-            }
+        return expense -> {
+            throw new RuntimeException("Thrown by throwExceptionRule() in " + ExpenseRules.class.getName());
         };
     }
 }

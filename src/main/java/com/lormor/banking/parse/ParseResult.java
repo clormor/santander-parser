@@ -7,6 +7,7 @@ import org.immutables.value.Value;
 import java.util.Collection;
 import java.util.Set;
 
+@SuppressWarnings("WeakerAccess")
 @Value.Immutable
 public abstract class ParseResult {
 
