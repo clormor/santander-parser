@@ -13,6 +13,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 abstract class AbstractStatementParser implements StatementParser {
@@ -55,26 +56,25 @@ abstract class AbstractStatementParser implements StatementParser {
     @Override
     public ImmutableParseResult parseExpenses(File file) {
 
-        if (file.isDirectory()) {
-            Multimap<String, Expense> expenses = LinkedListMultimap.create();
-            Set<String> skippedFiles = Sets.newLinkedHashSet();
-
-            File[] children = file.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    ImmutableParseResult partialResult = parseFile(child);
-                    expenses.putAll(partialResult.getExpenses());
-                    skippedFiles.addAll(partialResult.getSkippedFiles());
-                }
-            }
-            return ImmutableParseResult
-                    .builder()
-                    .putAllExpenses(expenses)
-                    .addAllSkippedFiles(skippedFiles)
-                    .build();
-        } else {
+        if (file.isFile()) {
             return parseFile(file);
         }
+
+        Multimap<String, Expense> expenses = LinkedListMultimap.create();
+        Set<String> skippedFiles = Sets.newLinkedHashSet();
+
+        File[] children = Objects.requireNonNull(file.listFiles());
+        for (File child : children) {
+            ImmutableParseResult partialResult = parseFile(child);
+            expenses.putAll(partialResult.getExpenses());
+            skippedFiles.addAll(partialResult.getSkippedFiles());
+        }
+
+        return ImmutableParseResult
+                .builder()
+                .putAllExpenses(expenses)
+                .addAllSkippedFiles(skippedFiles)
+                .build();
     }
 
     @VisibleForTesting

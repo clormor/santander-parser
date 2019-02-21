@@ -8,7 +8,7 @@ class AmountMatchesRule implements Function<Expense, Boolean> {
 
     private Double amount;
 
-    public AmountMatchesRule(Double amount) {
+    AmountMatchesRule(Double amount) {
         this.amount = amount;
     }
 

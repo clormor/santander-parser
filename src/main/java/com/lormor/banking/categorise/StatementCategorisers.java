@@ -19,6 +19,10 @@ public class StatementCategorisers {
 
     public static final String CATEGORY_UNCATEGORISED = "UNCATEGORISED";
 
+    private StatementCategorisers() {
+        // utility class
+    }
+
     public static StatementCategoriser create(LinkedListMultimap<String, Function<Expense, Boolean>> rules) {
         return new DefaultStatementCategoriser(rules);
     }

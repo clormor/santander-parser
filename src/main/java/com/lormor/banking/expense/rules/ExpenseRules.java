@@ -8,6 +8,10 @@ import java.util.function.Function;
 @SuppressWarnings("WeakerAccess")
 public class ExpenseRules {
 
+    private ExpenseRules() {
+        // utility class
+    }
+
     public static AmountMatchesRule amountMatchesRule(double amount) {
         return new AmountMatchesRule(amount);
     }

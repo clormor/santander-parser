@@ -22,10 +22,7 @@ class SantanderCreditStatementParser extends AbstractStatementParser {
     // If a statement spans 2 years, then any December dates occur in the previous year
     private final boolean wrapYear;
     private final int year;
-    private final DateTimeFormatter ndFormatter;
-    private final DateTimeFormatter rdFormatter;
-    private final DateTimeFormatter stFormatter;
-    private final DateTimeFormatter thFormatter;
+    private final DateTimeFormatter dateFormatter;
     private final NumberFormat format = NumberFormat.getInstance(Locale.UK);
 
     SantanderCreditStatementParser() {
@@ -35,10 +32,7 @@ class SantanderCreditStatementParser extends AbstractStatementParser {
     SantanderCreditStatementParser(int year, boolean wrapYear) {
         this.year = year;
         this.wrapYear = wrapYear;
-        ndFormatter = DateTimeFormat.forPattern("d'nd' MMM").withDefaultYear(year);
-        rdFormatter = DateTimeFormat.forPattern("d'rd' MMM").withDefaultYear(year);
-        stFormatter = DateTimeFormat.forPattern("d'st' MMM").withDefaultYear(year);
-        thFormatter = DateTimeFormat.forPattern("d'th' MMM").withDefaultYear(year);
+        dateFormatter = DateTimeFormat.forPattern("d MMM").withDefaultYear(year);
     }
 
     @Override
@@ -74,21 +68,12 @@ class SantanderCreditStatementParser extends AbstractStatementParser {
 
     @VisibleForTesting
     DateTime parseDate(String date) {
-        DateTime result;
+        date = date.replaceFirst("st", "");
+        date = date.replaceFirst("nd", "");
+        date = date.replaceFirst("rd", "");
+        date = date.replaceFirst("th", "");
 
-        try {
-            result = thFormatter.parseDateTime(date);
-        } catch (IllegalArgumentException e1) {
-            try {
-                result = stFormatter.parseDateTime(date);
-            } catch (IllegalArgumentException e2) {
-                try {
-                    result = ndFormatter.parseDateTime(date);
-                } catch (IllegalArgumentException e3) {
-                    result = rdFormatter.parseDateTime(date);
-                }
-            }
-        }
+        DateTime result = dateFormatter.parseDateTime(date);
 
         if (wrapYear && result.getMonthOfYear() == 12) {
             return result.minusYears(1);
