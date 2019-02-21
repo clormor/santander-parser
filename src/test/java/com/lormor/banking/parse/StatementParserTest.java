@@ -10,7 +10,7 @@ import java.util.Objects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class ParserTest {
+public class StatementParserTest {
 
     private static final String MISC_DIR = "misc";
     private static final String SIMPLE_PDF = MISC_DIR + File.separator + "example.pdf";
@@ -58,7 +58,7 @@ public class ParserTest {
     @Test
     public void parse_simple_pdf() {
         File testFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(SIMPLE_PDF)).getFile());
-        ParsedResult result = parser.parseExpenses(testFile);
+        ImmutableParseResult result = parser.parseExpenses(testFile);
         assertEquals(0, result.getSkippedFiles().size());
         assertEquals(0, result.getExpenses().size());
     }
@@ -66,7 +66,7 @@ public class ParserTest {
     @Test
     public void parse_directory() {
         File testDir = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(MISC_DIR)).getFile());
-        ParsedResult result = parser.parseExpenses(testDir);
+        ImmutableParseResult result = parser.parseExpenses(testDir);
         assertEquals(2, result.getSkippedFiles().size());
         assertEquals(0, result.getExpenses().size());
     }
@@ -74,7 +74,7 @@ public class ParserTest {
     @Test
     public void parse_valid_sample() {
         File testFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(SAMPLE_STATEMENT_1)).getFile());
-        ParsedResult result = parser.parseExpenses(testFile);
+        ImmutableParseResult result = parser.parseExpenses(testFile);
         assertEquals(0, result.getSkippedFiles().size());
         assertEquals(2, result.getExpenses().get(testFile.getName()).size());
     }

@@ -5,7 +5,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.lormor.banking.expense.Expense;
-import com.lormor.banking.parse.ParsedResult;
+import com.lormor.banking.parse.ImmutableParseResult;
 import com.lormor.banking.parse.StatementParser;
 import com.lormor.banking.parse.StatementParsers;
 
@@ -34,18 +34,18 @@ class DefaultStatementCategoriser implements StatementCategoriser {
     }
 
     @Override
-    public CategorisedResult categoriseExpenses(File file) {
+    public CategoriseResult categoriseExpenses(File file) {
         Map<String, Multimap<String, Expense>> processedFiles = Maps.newLinkedHashMap();
 
-        ParsedResult parsedResults = DEFAULT_PARSER.parseExpenses(file);
+        ImmutableParseResult parsedResults = (ImmutableParseResult) DEFAULT_PARSER.parseExpenses(file);
 
-        for (String fileKey : parsedResults.getExpenses().keySet()) {
-            Collection<Expense> expenses = parsedResults.getExpenses().get(fileKey);
+        for (String key : parsedResults.getParsedFiles()) {
+            Collection<Expense> expenses = parsedResults.getFileExpenses(key);
             Multimap<String, Expense> categorisedResult = categoriseExpense(expenses);
-            processedFiles.put(fileKey, categorisedResult);
+            processedFiles.put(key, categorisedResult);
         }
 
-        return ImmutableCategorisedResult
+        return ImmutableCategoriseResult
                 .builder()
                 .addAllSkippedFiles(parsedResults.getSkippedFiles())
                 .putAllCategorisedExpenses(processedFiles)

@@ -34,7 +34,7 @@ abstract class AbstractStatementParser implements StatementParser {
         }
     }
 
-    private ParsedResult parseFile(File file) {
+    private ImmutableParseResult parseFile(File file) {
         Multimap<String, Expense> results = LinkedListMultimap.create();
         Set<String> skippedFiles = Sets.newLinkedHashSet();
 
@@ -45,7 +45,7 @@ abstract class AbstractStatementParser implements StatementParser {
             skippedFiles.add(file.getName());
         }
 
-        return ImmutableParsedResult
+        return ImmutableParseResult
                 .builder()
                 .addAllSkippedFiles(skippedFiles)
                 .putAllExpenses(results)
@@ -53,7 +53,7 @@ abstract class AbstractStatementParser implements StatementParser {
     }
 
     @Override
-    public ParsedResult parseExpenses(File file) {
+    public ImmutableParseResult parseExpenses(File file) {
 
         if (file.isDirectory()) {
             Multimap<String, Expense> expenses = LinkedListMultimap.create();
@@ -62,12 +62,12 @@ abstract class AbstractStatementParser implements StatementParser {
             File[] children = file.listFiles();
             if (children != null) {
                 for (File child : children) {
-                    ParsedResult partialResult = parseFile(child);
+                    ImmutableParseResult partialResult = parseFile(child);
                     expenses.putAll(partialResult.getExpenses());
                     skippedFiles.addAll(partialResult.getSkippedFiles());
                 }
             }
-            return ImmutableParsedResult
+            return ImmutableParseResult
                     .builder()
                     .putAllExpenses(expenses)
                     .addAllSkippedFiles(skippedFiles)

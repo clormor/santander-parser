@@ -4,6 +4,6 @@ import java.io.File;
 
 public interface StatementCategoriser {
 
-    CategorisedResult categoriseExpenses(File file);
+    CategoriseResult categoriseExpenses(File file);
 
 }

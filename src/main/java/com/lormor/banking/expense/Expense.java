@@ -19,4 +19,11 @@ public abstract class Expense {
     }
 
     public abstract Double getAmount();
+
+    @Override
+    public boolean equals(Object o) {
+        // treat all expenses as unique - it is possible albeit unusual to legitimately spend the same amount
+        // at the same place twice on the same day (in general dates will be rounded to the nearest day).
+        return false;
+    }
 }

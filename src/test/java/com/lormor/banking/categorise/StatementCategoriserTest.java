@@ -1,7 +1,6 @@
 package com.lormor.banking.categorise;
 
 import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import com.lormor.banking.expense.Expense;
 import com.lormor.banking.expense.ImmutableExpense;
 import com.lormor.banking.expense.rules.ExpenseRules;
@@ -9,12 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
-public class ExpenseCategoriserTest {
+public class StatementCategoriserTest {
 
     private static final String MISC_DIR = "misc";
     private static final String SIMPLE_PDF = MISC_DIR + File.separator + "example.pdf";
@@ -35,9 +35,9 @@ public class ExpenseCategoriserTest {
         LinkedListMultimap<String, Function<Expense, Boolean>> rules = LinkedListMultimap.create();
         categoriser = (DefaultStatementCategoriser) StatementCategorisers.create(rules);
 
-        CategorisedResult result = categoriser.categoriseExpenses(testFile);
+        CategoriseResult result = categoriser.categoriseExpenses(testFile);
         assertEquals(0, result.getSkippedFiles().size());
-        assertEquals(0, result.getCategorisedExpenses().size());
+        assertEquals(0, result.getCategorisedFiles().size());
     }
 
     @Before
@@ -95,15 +95,15 @@ public class ExpenseCategoriserTest {
         File sample = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(SAMPLE_STATEMENT_1)).getFile());
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         categoriser = (DefaultStatementCategoriser) StatementCategorisers.create(rules);
-        CategorisedResult result = categoriser.categoriseExpenses(sample);
+        CategoriseResult result = categoriser.categoriseExpenses(sample);
 
         assertEquals(1, result.getCategorisedExpenses().keySet().size());
 
-        Multimap<String, Expense> categories = result.getCategorisedExpenses().get(sample.getName());
-        assertEquals(2, categories.keySet().size());
+        Collection<String> categories = result.getFileCategories(sample.getName());
+        assertEquals(2, categories.size());
 
-        assertEquals(1, categories.get(StatementCategorisers.CATEGORY_UNCATEGORISED).size());
-        assertEquals(1, categories.get(TEST_CATEGORY).size());
+        assertEquals(1, result.getFileExpenses(sample.getName(), StatementCategorisers.CATEGORY_UNCATEGORISED).size());
+        assertEquals(1, result.getFileExpenses(sample.getName(), TEST_CATEGORY).size());
     }
 
     @Test
@@ -114,18 +114,18 @@ public class ExpenseCategoriserTest {
 
         rules.put(TEST_CATEGORY, ExpenseRules.amountMatchesRule(10.0));
         categoriser = (DefaultStatementCategoriser) StatementCategorisers.create(rules);
-        CategorisedResult result = categoriser.categoriseExpenses(sampleDir);
+        CategoriseResult result = categoriser.categoriseExpenses(sampleDir);
 
-        assertEquals(2, result.getCategorisedExpenses().keySet().size());
+        assertEquals(2, result.getCategorisedFiles().size());
 
-        Multimap<String, Expense> categories = result.getCategorisedExpenses().get(sample1.getName());
-        assertEquals(2, categories.keySet().size());
-        assertEquals(1, categories.get(StatementCategorisers.CATEGORY_UNCATEGORISED).size());
-        assertEquals(1, categories.get(TEST_CATEGORY).size());
+        Collection<String> categories = result.getFileCategories(sample1.getName());
+        assertEquals(2, categories.size());
+        assertEquals(1, result.getFileExpenses(sample1.getName(), StatementCategorisers.CATEGORY_UNCATEGORISED).size());
+        assertEquals(1, result.getFileExpenses(sample1.getName(), TEST_CATEGORY).size());
 
-        categories = result.getCategorisedExpenses().get(sample2.getName());
-        assertEquals(2, categories.keySet().size());
-        assertEquals(1, categories.get(StatementCategorisers.CATEGORY_UNCATEGORISED).size());
-        assertEquals(3, categories.get(TEST_CATEGORY).size());
+        categories = result.getFileCategories(sample2.getName());
+        assertEquals(2, categories.size());
+        assertEquals(1, result.getFileExpenses(sample2.getName(), StatementCategorisers.CATEGORY_UNCATEGORISED).size());
+        assertEquals(3, result.getFileExpenses(sample2.getName(), TEST_CATEGORY).size());
     }
 }
