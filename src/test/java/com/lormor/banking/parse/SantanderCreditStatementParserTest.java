@@ -1,4 +1,4 @@
-package com.lormor.banking.santander;
+package com.lormor.banking.parse;
 
 import com.google.common.collect.Lists;
 import com.lormor.banking.expense.Expense;
@@ -10,8 +10,6 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class SantanderCreditStatementParserTest {
@@ -145,12 +143,16 @@ public class SantanderCreditStatementParserTest {
     }
 
     private void check_not_valid(String line) {
-        assertFalse(parser.isValidExpenseLine(line));
+        try {
+            parser.parseLine(line);
+            fail("Expected the following to be inbvalid but it is not: " + line);
+        } catch (NotValidExpenseException e) {
+            // expected
+        }
     }
 
     private void check_valid(String line, int expectDay, int expectMonth, int expectYear, Double expectValue) {
         try {
-            assertTrue(parser.isValidExpenseLine(line));
             Expense expense = parser.parseLine(line);
             check_valid_expense(expense, expectDay, expectMonth, expectYear, expectValue);
         } catch (NotValidExpenseException e) {

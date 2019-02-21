@@ -39,18 +39,12 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output + configurations.testCompile
-        runtimeClasspath += output + compileClasspath + configurations.testRuntime
-    }
-}
-
 dependencies {
     compile "com.google.guava:guava:$guavaVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "org.apache.pdfbox:pdfbox:$pdfBoxVersion"
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    testCompileOnly 'com.google.code.findbugs:annotations:3.0.1'
     implementation "org.immutables:value-annotations:$immutablesVersion"
     annotationProcessor "org.immutables:value:$immutablesVersion"
 	testCompile "junit:junit:$junitVersion"
@@ -58,9 +52,6 @@ dependencies {
 
 idea {
     module {
-        testSourceDirs += sourceSets.integrationTest.java.srcDirs
-        testResourceDirs += sourceSets.integrationTest.resources.srcDirs
-        scopes.TEST.plus += [ configurations.integrationTestCompile ]
         inheritOutputDirs = true
         downloadJavadoc = true
         downloadSources = true
@@ -90,16 +81,6 @@ jacocoTestCoverageVerification {
     }
 }
 
-task integrationTest(type: Test) {
-    description = 'Runs the integration tests.'
-    group = 'verification'
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-    mustRunAfter test
-}
-
-check.dependsOn integrationTest
 check.dependsOn jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification
 
@@ -124,13 +105,13 @@ modifyPom {
     project {
         name 'Santander Parser'
         description 'Java library for parsing Santander UK bank and credit card statements.'
-        url 'https://github.com/clormor/santander-parser'
+        url 'https://github.com/clormor/statements-parser'
         inceptionYear '2019'
 
         scm {
-            url 'https://github.com/clormor/santander-parser'
-            connection 'git@github.com:clormor/santander-parser.git'
-            developerConnection 'git@github.com:clormor/santander-parser.git'
+            url 'https://github.com/clormor/statements-parser'
+            connection 'git@github.com:clormor/statements-parser.git'
+            developerConnection 'git@github.com:clormor/statements-parser.git'
         }
 
         licenses {
