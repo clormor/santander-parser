@@ -63,7 +63,7 @@ abstract class AbstractStatementParser implements StatementParser {
         Multimap<String, Expense> expenses = LinkedListMultimap.create();
         Set<String> skippedFiles = Sets.newLinkedHashSet();
 
-        File[] children = Objects.requireNonNull(file.listFiles());
+        File[] children = file.listFiles();
         if (children != null) {
             for (File child : children) {
                 ImmutableParseResult partialResult = parseFile(child);
