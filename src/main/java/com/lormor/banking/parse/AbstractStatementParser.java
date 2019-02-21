@@ -13,7 +13,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 abstract class AbstractStatementParser implements StatementParser {
